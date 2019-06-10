@@ -1,78 +1,69 @@
 <template>
   <div class="app-container">
     <el-table
-      v-loading="listLoading"
-      :data="list"
-      element-loading-text="Loading"
-      border
-      fit
-      highlight-current-row
-    >
-      <el-table-column align="center" label="ID" width="95">
-        <template slot-scope="scope">
-          {{ scope.$index }}
-        </template>
+      :data="planList"
+      style="width: 100%">
+      <el-table-column
+        prop="name"
+        label="方案名称"
+        width="180">
       </el-table-column>
-      <el-table-column label="Title">
-        <template slot-scope="scope">
-          {{ scope.row.title }}
-        </template>
+      <el-table-column
+        prop="point"
+        label="方案内容">
       </el-table-column>
-      <el-table-column label="Author" width="110" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.author }}</span>
-        </template>
+      <el-table-column
+        prop="disabled_name"
+        label="状态">
       </el-table-column>
-      <el-table-column label="Pageviews" width="110" align="center">
-        <template slot-scope="scope">
-          {{ scope.row.pageviews }}
-        </template>
+      <el-table-column
+        prop="created_at"
+        label="创建日期"
+        width="180">
       </el-table-column>
-      <el-table-column class-name="status-col" label="Status" width="110" align="center">
-        <template slot-scope="scope">
-          <el-tag :type="scope.row.status | statusFilter">{{ scope.row.status }}</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column align="center" prop="created_at" label="Display_time" width="200">
-        <template slot-scope="scope">
-          <i class="el-icon-time" />
-          <span>{{ scope.row.display_time }}</span>
-        </template>
-      </el-table-column>
+       <el-table-column
+      fixed="right"
+      label="操作"
+      width="100">
+      <template slot-scope="scope">
+        <el-button @click="handleClick(scope.row)" type="text" size="small">{{scope.row.disabled === 0 ?"禁用":"启用"}}</el-button>
+      </template>
+    </el-table-column>
     </el-table>
   </div>
 </template>
 
 <script>
-import { getList } from '@/api/table'
+import { MessageBox, Message } from 'element-ui'
+import { getPlans } from '@/api/scheme'
 
 export default {
-  filters: {
-    statusFilter(status) {
-      const statusMap = {
-        published: 'success',
-        draft: 'gray',
-        deleted: 'danger'
-      }
-      return statusMap[status]
-    }
-  },
   data() {
     return {
-      list: null,
-      listLoading: true
+      planList:[]
     }
   },
-  created() {
-    this.fetchData()
+  mounted() {
+    getPlans().then(res => {
+      let planList = res.data;
+
+      planList.forEach(item => {
+        let point = "";
+        let content = JSON.parse(item.content);
+        content.forEach(item => {
+            point = point + item.id + ","
+        })
+        point = point.substring(0,point.length-1)
+        item.point = point;
+      })
+
+
+      this.planList = planList;
+    })
   },
   methods: {
-    fetchData() {
-      this.listLoading = true
-      getList().then(response => {
-        this.list = response.data.items
-        this.listLoading = false
-      })
+    handleClick:function(row){
+      console.log(row)
     }
   }
 }

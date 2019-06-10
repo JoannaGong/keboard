@@ -1,0 +1,22 @@
+.buttonGroup{
+  width: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 50px;
+  button:first-child{
+    margin-right: 30px;
+  }
+}
+.inputGroup{
+  display: flex;
+  align-items: center;
+  padding-left: 28px;
+  margin-top: 20px;
+  .name{
+    flex-shrink: 0;
+  }
+  input{
+    width: 200px;
+  }
+}
