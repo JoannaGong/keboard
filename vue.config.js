@@ -35,7 +35,7 @@ module.exports = {
     },
     proxy: {
       '/api': {
-        target: 'http://keboard.zkong.me/api',
+        target: 'http://keboard_api.zkong.me/api',
         changeOrigin: true,
         ws: true,
         pathRewrite: {
