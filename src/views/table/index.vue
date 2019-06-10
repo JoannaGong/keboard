@@ -49,7 +49,7 @@ export default {
 
       planList.forEach(item => {
         let point = "";
-        let content = JSON.parse(item.content);
+        let content = item.content;
         content.forEach(item => {
             point = point + item.id + ","
         })
