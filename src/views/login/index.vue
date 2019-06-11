@@ -1,6 +1,6 @@
 <template>
   <div class="login-container">
-    <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
+    <el-form ref="loginForm" :model="loginForm"  class="login-form" auto-complete="on" label-position="left">
 
       <div class="title-container">
         <h3 class="title">Login Form</h3>
@@ -48,25 +48,20 @@
 <script>
 import { MessageBox, Message } from 'element-ui'
 import { validUsername } from '@/utils/validate'
+import { setToken } from '@/utils/auth'
+import { login } from '@/api/user'
 
 export default {
   name: 'Login',
   data() {
-    const validateUsername = (rule, value, callback) => {
-      if (!validUsername(value)) {
-        callback(new Error('Please enter the correct user name'))
-      } else {
-        callback()
-      }
-    }
     return {
       loginForm: {
         username: 'admin',
-        password: ''
+        password: 'admin'
       },
       loginRules: {
-        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
-        password: [{ required: true, trigger: 'blur' }]
+        username: [{ required: true, trigger: 'blur'}],
+        password: [{ required: true, trigger: 'blur'}]
       },
       loading: false,
       passwordType: 'password',
@@ -93,26 +88,17 @@ export default {
       })
     },
     handleLogin() {
-      this.$refs.loginForm.validate(valid => {
-        if (valid) {
-          this.loading = true
-          if(this.loginForm.username === 'admin' && this.loginForm.password === 'admin'){
-            this.$router.push({ path: '/example' })
-            this.loading = false
-
-          }else{
-            Message({
-              message: '请输入正确的用户名和密码',
-              type:'error',
-              duration: 2 * 1000
-            })
-            this.loading = false
-          }
-        } else {
-          console.log('error submit!!')
-          return false
-        }
-      })
+       this.loading = true
+       login({
+         username:this.loginForm.username,
+         password:this.loginForm.password
+       }).then(res => {
+          setToken('admin')
+          this.$router.push({ path: '/example' })
+          this.loading = false
+       }).catch(error => {
+          this.loading = false
+       })
     }
   }
 }

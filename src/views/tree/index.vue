@@ -1,5 +1,5 @@
 <template>
-  <el-container  style="height: 600px;max-width: 500px;padding-top:20px;width:100%">
+  <el-container  style="height:100%;max-width: 500px;padding-top:20px;width:100%">
     <el-header>
       <div class="inputGroup">
         <div class="name">方案名称：</div>
@@ -7,7 +7,7 @@
       </div>
     </el-header>
     <el-main>
-      <div ref="myChart" style="height:700px;width:100%;min-width:500px;padding-left:20px"></div>
+      <div ref="myChart" style="height:500px;width:100%;min-width:500px;padding-left:20px"></div>
     </el-main>
     <el-footer>
       <div class="buttonGroup" v-if="!planId">
@@ -161,9 +161,8 @@ export default {
             top:0,
             left:0,
             right:0,
-            bottom:0,
+            bottom:30,
             width:'100%',
-            height:'100%',
             containLabel:true
           },
         ],
@@ -181,8 +180,7 @@ export default {
             },
             splitLine:{
               show:false
-            },
-            offset:1
+            }
           },
           {
             data:['A','','B','','C','','D','','E','','F','','G','','H','','I','','J','','K'],
