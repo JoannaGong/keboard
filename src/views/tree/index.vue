@@ -1,17 +1,18 @@
 <template>
-  <el-container  style="height:100%;max-width: 500px;padding-top:20px;width:100%">
+  <el-container  style="height:100%;max-width: 400px;padding-top:20px;width:100%">
     <el-header>
       <div class="inputGroup">
         <div class="name">方案名称：</div>
         <el-input v-model="planName" placeholder="请输入方案名称"></el-input>
       </div>
     </el-header>
-    <el-main>
-      <div ref="myChart" style="height:500px;width:100%;min-width:500px;padding-left:20px"></div>
+    <el-main style="background: #999;padding-top:20px;">
+      <div ref="myChart" style="height:500px;width:100%;padding-left:20px;padding-right:20px"></div>
     </el-main>
     <el-footer>
       <div class="buttonGroup" v-if="!planId">
         <el-button type="primary" @click="savePlan" >保存方案</el-button>
+        <el-button type="primary" @click="savePlan(0)" >保存并启用方案</el-button>
         <el-button @click="reset">重置方案</el-button>
       </div>
       <div class="buttonGroup" v-else>
@@ -26,8 +27,12 @@
 import { MessageBox, Message, Header } from 'element-ui'
 import './index.scss'
 import { setPlans,amendPlan } from '@/api/scheme'
-import pointImg from '@/assets/image/pointImg.png'
 import { setTimeout } from 'timers';
+
+import pointImg from '@/assets/image/pointImg.png'
+import pointWhite from '@/assets/image/point_white.png'
+import pointYellow from '@/assets/image/point_yellow.png'
+
 export default {
 
   data() {
@@ -86,19 +91,20 @@ export default {
     reset:function(){
       this.pointIdArr = []
     },
-    savePlan:function(){
+    savePlan:function(start){
 
       if(!this.planName){
         Message({
-            message: '请填写方案名称',
-            type:'warning',
-            duration: 2 * 1000
-          })
+          message: '请填写方案名称',
+          type:'warning',
+          duration: 2 * 1000
+        })
+        return
       }
       let sendData = {
         name:this.planName,
         content:JSON.stringify(this.pointIdArr),
-        disabled:1
+        disabled:start || 1
       }
       setPlans(sendData).then((res)=>{
           Message({
@@ -135,15 +141,10 @@ export default {
       let id = 23;
       let x = 0;
       let y = 1;
-      for(let i = 0;id < 391;i++,id++){
+      for(let i = 0;id < 221;i++,id++){
         if(y == 19 ){
-          x = x + 1;
-          y = 1.5
-        }
-
-        if(y == 18.5){
-          y = 1;
-          x = x + 1
+          x = x + 2;
+          y = 1
         }
 
         point.push({
@@ -160,7 +161,7 @@ export default {
           {
             top:0,
             left:0,
-            right:0,
+            right:10,
             bottom:30,
             width:'100%',
             containLabel:true
@@ -234,9 +235,21 @@ export default {
           }
         ],
         series: [{
-            symbol:'image://'+pointImg,
             symbolSize: 22,
-            data: point,
+            data: point.map((item,index) => {
+              let symbol = "";
+              if(item.value[1] < 4){
+                symbol = 'image://'+ pointImg
+              }else if(item.value[1] < 18){
+                symbol = 'image://'+ pointWhite
+              }else{
+                symbol = 'image://'+ pointYellow
+              }
+              return {
+                ...item,
+                symbol:symbol
+              }
+            }),
             type: 'scatter', 
             animation:false
         }]
