@@ -5,12 +5,12 @@
       style="width: 100%">
       <el-table-column
         prop="name"
-        label="方案名称"
-        width="180">
+        label="方案名称">
       </el-table-column>
       <el-table-column
         prop="disabled_name"
-        label="状态">
+        label="状态"
+         width="180">
       </el-table-column>
       <el-table-column
         prop="created_at"
@@ -20,10 +20,11 @@
        <el-table-column
       fixed="right"
       label="操作"
-      width="100">
+      width="200">
       <template slot-scope="scope">
         <el-button @click="handleClick(scope.row)" type="text" size="small">{{scope.row.disabled === 0 ?"禁用":"启用"}}</el-button>
-        <el-button @click="toCheck(scope.row)" type="text" size="small">查看</el-button>
+        <el-button @click="toCheck(scope.row)" type="text" size="small">修改</el-button>
+        <el-button @click="toDel(scope.row)" type="text" size="small">删除</el-button>
       </template>
     </el-table-column>
     </el-table>
@@ -32,7 +33,7 @@
 
 <script>
 import { MessageBox, Message } from 'element-ui'
-import { getPlans,setPlan } from '@/api/scheme'
+import { getPlans,setPlan,delPlan } from '@/api/scheme'
 
 export default {
   data() {
@@ -90,7 +91,20 @@ export default {
       })
     },
     toCheck:function(row){
-      this.$router.push({ name: 'Tree', params: { id: row.id,content:row.content }})
+      this.$router.push({ name: 'Tree', params: { id: row.id,content:row.content,name:row.name }})
+    },
+    toDel:function(row){
+      let planList = this.planList;
+      delPlan({id:row.id}).then(res => {
+          let index = planList.findIndex(item => item.id === row.id);
+          planList.splice(index,1);
+          this.planList = planList;
+          Message({
+            message: '删除成功',
+            type:'success',
+            duration: 2 * 1000
+          })
+      })
     }
   }
 }

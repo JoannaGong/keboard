@@ -1,7 +1,7 @@
 <template>
   <el-container  style="height: 700px;max-width: 500px;padding-top:20px;width:100%">
     <el-header>
-      <div class="inputGroup" v-if="!planId">
+      <div class="inputGroup">
         <div class="name">方案名称：</div>
         <el-input v-model="planName" placeholder="请输入方案名称"></el-input>
       </div>
@@ -15,7 +15,8 @@
         <el-button @click="reset">重置方案</el-button>
       </div>
       <div class="buttonGroup" v-else>
-        <el-button @click="$router.back(-1)">返回</el-button>
+        <el-button type="primary" @click="amend">保存修改</el-button>
+        <el-button @click="$router.back(-1)">返回列表</el-button>
       </div>
     </el-footer>
   </el-container>
@@ -24,8 +25,9 @@
 <script>
 import { MessageBox, Message, Header } from 'element-ui'
 import './index.scss'
-import { setPlans } from '@/api/scheme'
+import { setPlans,amendPlan } from '@/api/scheme'
 import pointImg from '@/assets/image/pointImg.png'
+import { setTimeout } from 'timers';
 export default {
 
   data() {
@@ -33,7 +35,7 @@ export default {
       pointIdArr:this.$route.params.content || [],
       option:{},
       myChart:{},
-      planName:"",
+      planName:this.$route.params.name || "",
       planId:this.$route.params.id || null
     }
   },
@@ -63,10 +65,36 @@ export default {
     this.drawLine();
   },
   methods: {
+    amend:function(){
+      const params ={
+            id:this.planId,
+            name:this.planName,
+            content:JSON.stringify(this.pointIdArr)
+        }
+        amendPlan(params).then(res => {
+          Message({
+            message: '修改成功',
+            type:'success',
+            duration: 2 * 1000
+          })
+
+          setTimeout(()=>{
+              this.$router.back(-1)
+          },2000)
+        })
+    },
     reset:function(){
       this.pointIdArr = []
     },
     savePlan:function(){
+
+      if(!this.planName){
+        Message({
+            message: '请填写方案名称',
+            type:'warning',
+            duration: 2 * 1000
+          })
+      }
       let sendData = {
         name:this.planName,
         content:JSON.stringify(this.pointIdArr),
@@ -231,19 +259,18 @@ export default {
       // 绘制图表
       this.myChart.setOption(initOption);
 
-      if(!this.planId){
-        this.myChart.on('click', (params)=>{
-          let id = params.data.id;
-          let value = params.data.value;
-          
-          let index = this.pointIdArr.findIndex(item => item.id == id);
-          if(index == -1){
-              this.pointIdArr.push({id,value})
-          }else{
-            this.pointIdArr.splice(index,1)
-          }
-        })
-      }
+
+      this.myChart.on('click', (params)=>{
+        let id = params.data.id;
+        let value = params.data.value;
+        
+        let index = this.pointIdArr.findIndex(item => item.id == id);
+        if(index == -1){
+            this.pointIdArr.push({id,value})
+        }else{
+          this.pointIdArr.splice(index,1)
+        }
+      })
       
     }
   }

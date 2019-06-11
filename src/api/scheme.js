@@ -21,3 +21,18 @@ export function setPlan(params) {
     params
   })
 }
+
+export function amendPlan(params) { 
+  return request({
+    url: '/plans/'+params.id,
+    method: 'patch',
+    params
+  })
+}
+
+export function delPlan(params) { 
+  return request({
+    url: '/plans/'+params.id,
+    method: 'delete'
+  })
+}
