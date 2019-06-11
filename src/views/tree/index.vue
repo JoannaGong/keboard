@@ -7,7 +7,7 @@
       </div>
     </el-header>
     <el-main>
-      <div ref="myChart" style="height: 100%;width:100%;min-width:500px;padding-left:20px"></div>
+      <div ref="myChart" style="height: 800px;width:100%;min-width:500px;padding-left:20px"></div>
     </el-main>
     <el-footer>
       <div class="buttonGroup" v-if="!planId">
@@ -106,6 +106,10 @@ export default {
             type:'success',
             duration: 2 * 1000
           })
+
+          setTimeout(()=>{
+              this.$router.push('/example/table')
+          },2000)
       })
     },
     drawLine() {
