@@ -30,7 +30,6 @@
           ref="password"
           v-model="loginForm.password"
           :type="passwordType"
-          placeholder="Password"
           name="password"
           tabindex="2"
           auto-complete="on"
@@ -42,17 +41,12 @@
       </el-form-item>
 
       <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">Login</el-button>
-
-      <div class="tips">
-        <span style="margin-right:20px;">username: admin</span>
-        <span> password: any</span>
-      </div>
-
     </el-form>
   </div>
 </template>
 
 <script>
+import { MessageBox, Message } from 'element-ui'
 import { validUsername } from '@/utils/validate'
 
 export default {
@@ -65,21 +59,14 @@ export default {
         callback()
       }
     }
-    const validatePassword = (rule, value, callback) => {
-      if (value.length < 6) {
-        callback(new Error('The password can not be less than 6 digits'))
-      } else {
-        callback()
-      }
-    }
     return {
       loginForm: {
         username: 'admin',
-        password: '111111'
+        password: ''
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
-        password: [{ required: true, trigger: 'blur', validator: validatePassword }]
+        password: [{ required: true, trigger: 'blur' }]
       },
       loading: false,
       passwordType: 'password',
@@ -109,14 +96,18 @@ export default {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
-            this.$router.push({ path: '/' })
+          if(this.loginForm.username === 'admin' && this.loginForm.password === 'admin'){
+            this.$router.push({ path: '/example' })
+            this.loading = false
 
-          // this.$store.dispatch('user/login', this.loginForm).then(() => {
-          //   this.$router.push({ path: this.redirect || '/' })
-          //   this.loading = false
-          // }).catch(() => {
-          //   this.loading = false
-          // })
+          }else{
+            Message({
+              message: '请输入正确的用户名和密码',
+              type:'error',
+              duration: 2 * 1000
+            })
+            this.loading = false
+          }
         } else {
           console.log('error submit!!')
           return false
