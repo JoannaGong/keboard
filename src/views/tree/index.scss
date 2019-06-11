@@ -1,5 +1,7 @@
+.container{
+
+}
 .buttonGroup{
-  width: 500px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -11,12 +13,10 @@
 .inputGroup{
   display: flex;
   align-items: center;
-  padding-left: 28px;
-  margin-top: 20px;
   .name{
     flex-shrink: 0;
   }
   input{
-    width: 200px;
+    flex:1;
   }
 }

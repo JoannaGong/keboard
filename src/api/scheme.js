@@ -14,3 +14,10 @@ export function getPlans() {
     method: 'get'
   })
 }
+export function setPlan(params) { 
+  return request({
+    url: '/setPlan',
+    method: 'post',
+    params
+  })
+}

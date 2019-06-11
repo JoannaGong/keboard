@@ -9,10 +9,6 @@
         width="180">
       </el-table-column>
       <el-table-column
-        prop="point"
-        label="方案内容">
-      </el-table-column>
-      <el-table-column
         prop="disabled_name"
         label="状态">
       </el-table-column>
@@ -27,6 +23,7 @@
       width="100">
       <template slot-scope="scope">
         <el-button @click="handleClick(scope.row)" type="text" size="small">{{scope.row.disabled === 0 ?"禁用":"启用"}}</el-button>
+        <el-button @click="toCheck(scope.row)" type="text" size="small">查看</el-button>
       </template>
     </el-table-column>
     </el-table>
@@ -35,7 +32,7 @@
 
 <script>
 import { MessageBox, Message } from 'element-ui'
-import { getPlans } from '@/api/scheme'
+import { getPlans,setPlan } from '@/api/scheme'
 
 export default {
   data() {
@@ -63,7 +60,37 @@ export default {
   },
   methods: {
     handleClick:function(row){
-      console.log(row)
+      const id = row.id;
+      const disabled = row.disabled  === 0 ? 1:0;
+      const msg  = row.disabled  === 0 ? '禁用成功':'启用成功'
+
+      const params = {
+        id,disabled
+      }
+      let planList = this.planList;
+      
+      setPlan(params).then(res => {
+        planList.forEach(item => {
+          if(item.id === id){
+            item.disabled = item.disabled === 0 ? 1:0;
+            item.disabled_name = item.disabled === 0 ? "启用":"禁用"
+          }else{
+            item.disabled = 1
+            item.disabled_name = "禁用"
+          }
+          
+         
+        })
+        this.planList = planList;
+          Message({
+            message: msg,
+            type:'success',
+            duration: 2 * 1000
+          })
+      })
+    },
+    toCheck:function(row){
+      this.$router.push({ name: 'Tree', params: { id: row.id,content:row.content }})
     }
   }
 }
