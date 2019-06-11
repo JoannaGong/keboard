@@ -35,7 +35,7 @@ const actions = {
   getInfo({ commit, state }) {
 
         commit('SET_NAME', 'admin')
-        commit('SET_AVATAR', 'http://shareskong.oss-cn-shanghai.aliyuncs.com/userstmp/LDvjCGpKUlif4XJswD7NgkbjkUhzu94fdbxcqaSq.jpeg')
+        commit('SET_AVATAR', 'http://shareskong.oss-cn-shanghai.aliyuncs.com/userstmp/g6vWlf5Eiz7jae30MqvI5Elp9IBCHHLYrqH7slNX.png')
       return;
   },
 
