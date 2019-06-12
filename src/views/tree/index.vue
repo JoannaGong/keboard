@@ -11,7 +11,7 @@
     </el-main>
     <el-footer>
       <div class="buttonGroup" v-if="!planId">
-        <el-button type="primary" @click="savePlan" >保存方案</el-button>
+        <el-button type="primary" @click="savePlan(1)" >保存方案</el-button>
         <el-button type="primary" @click="savePlan(0)" >保存并启用方案</el-button>
         <el-button @click="reset">重置方案</el-button>
       </div>
@@ -92,7 +92,7 @@ export default {
       this.pointIdArr = []
     },
     savePlan:function(start){
-
+        console.log(start)
       if(!this.planName){
         Message({
           message: '请填写方案名称',
@@ -104,7 +104,7 @@ export default {
       let sendData = {
         name:this.planName,
         content:JSON.stringify(this.pointIdArr),
-        disabled:start || 1
+        disabled:start
       }
       setPlans(sendData).then((res)=>{
           Message({
