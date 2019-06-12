@@ -34,12 +34,11 @@ module.exports = {
       errors: true
     },
     proxy: {
-      '/api': {
-        target: 'http://keboard_api.zkong.me/api',
+      '/': {
+        target: 'http://keboard_api.zkong.me/',
         changeOrigin: true,
-        ws: true,
         pathRewrite: {
-          '^/api': '/'
+          '^/': ''
         }
     }
     },

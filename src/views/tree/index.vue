@@ -7,7 +7,7 @@
       </div>
     </el-header>
     <el-main style="background: #999;padding-top:20px;">
-      <div ref="myChart" style="height:500px;width:100%;padding-left:20px;padding-right:20px"></div>
+      <div ref="myChart" style="height:500px;width:400px;padding-left:20px;padding-right:20px"></div>
     </el-main>
     <el-footer>
       <div class="buttonGroup" v-if="!planId">
