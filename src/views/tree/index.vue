@@ -16,7 +16,8 @@
         <el-button @click="reset">重置方案</el-button>
       </div>
       <div class="buttonGroup" v-else>
-        <el-button type="primary" @click="amend">保存修改</el-button>
+        <el-button type="primary" @click="amend(disabled)">保存修改</el-button>
+        <el-button type="primary" @click="amend(0)" >保存修改并启用方案</el-button>
         <el-button @click="$router.back(-1)">返回列表</el-button>
       </div>
     </el-footer>
@@ -41,7 +42,8 @@ export default {
       option:{},
       myChart:{},
       planName:this.$route.params.name || "",
-      planId:this.$route.params.id || null
+      planId:this.$route.params.id || null,
+      disabled:this.$route.params.disabled || 0
     }
   },
   watch: {
@@ -70,11 +72,12 @@ export default {
     this.drawLine();
   },
   methods: {
-    amend:function(){
+    amend:function(start){
       const params ={
             id:this.planId,
             name:this.planName,
-            content:JSON.stringify(this.pointIdArr)
+            content:JSON.stringify(this.pointIdArr),
+            disabled:start
         }
         amendPlan(params).then(res => {
           Message({

@@ -91,7 +91,7 @@ export default {
       })
     },
     toCheck:function(row){
-      this.$router.push({ name: 'Tree', params: { id: row.id,content:row.content,name:row.name }})
+      this.$router.push({ name: 'Tree', params: { id: row.id,content:row.content,name:row.name,disabled:row.disabled }})
     },
     toDel:function(row){
       let planList = this.planList;
