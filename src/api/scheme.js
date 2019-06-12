@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function setPlans(params) {
   return request({
-    url: '/plans',
+    url: '/api/plans',
     method: 'post',
     params
   })
@@ -10,13 +10,13 @@ export function setPlans(params) {
 
 export function getPlans() {
   return request({
-    url: '/plans',
+    url: '/api/plans',
     method: 'get'
   })
 }
 export function setPlan(params) { 
   return request({
-    url: '/setPlan',
+    url: '/api/setPlan',
     method: 'post',
     params
   })
@@ -24,7 +24,7 @@ export function setPlan(params) {
 
 export function amendPlan(params) { 
   return request({
-    url: '/plans/'+params.id,
+    url: '/api/plans/'+params.id,
     method: 'patch',
     params
   })
@@ -32,7 +32,7 @@ export function amendPlan(params) {
 
 export function delPlan(params) { 
   return request({
-    url: '/plans/'+params.id,
+    url: '/api/plans/'+params.id,
     method: 'delete'
   })
 }
