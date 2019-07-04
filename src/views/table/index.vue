@@ -57,6 +57,7 @@ export default {
 
 
       this.planList = planList;
+      console.log(this.planList)
     })
   },
   methods: {
