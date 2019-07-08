@@ -44,7 +44,7 @@ export default {
   mounted() {
     getPlans().then(res => {
       let planList = res.data;
-
+      // console.log(res)
       planList.forEach(item => {
         let point = "";
         let content = item.content;
@@ -53,6 +53,8 @@ export default {
         })
         point = point.substring(0,point.length-1)
         item.point = point;
+        console.log(point)
+        // console.log(planList)
       })
 
 
@@ -62,6 +64,7 @@ export default {
   },
   methods: {
     handleClick:function(row){
+      console.log(row)
       const id = row.id;
       const disabled = row.disabled  === 0 ? 1:0;
       const msg  = row.disabled  === 0 ? '禁用成功':'启用成功'
@@ -92,7 +95,15 @@ export default {
       })
     },
     toCheck:function(row){
-      this.$router.push({ name: 'Tree', params: { id: row.id,content:row.content,name:row.name,disabled:row.disabled }})
+      this.$router.push({ 
+        name: 'Tree', 
+        params: { 
+          id: row.id,
+          content:row.content,
+          name:row.name,
+          disabled:row.disabled 
+        }
+      })
     },
     toDel:function(row){
       let planList = this.planList;
